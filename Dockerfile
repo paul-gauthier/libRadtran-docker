@@ -11,7 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt
 
 RUN wget -O libRadtran.tar.gz \
-      https://www.libradtran.org/download/libRadtran-${LIBRADTRAN_VERSION}.tar.gz
+      https://www.libradtran.org/download/libRadtran-${LIBRADTRAN_VERSION}.tar.gz \
+ && wget -O reptran.tar.gz \
+      https://www.libradtran.org/download/reptran/reptran_2017_all.tar.gz
 
 FROM ubuntu:22.04
 
@@ -35,9 +37,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt
 
 COPY --from=fetch /opt/libRadtran.tar.gz /opt/libRadtran.tar.gz
+COPY --from=fetch /opt/reptran.tar.gz /opt/reptran.tar.gz
 
 RUN tar -xzf libRadtran.tar.gz \
  && rm libRadtran.tar.gz \
+ && tar -xzf reptran.tar.gz -C libRadtran-${LIBRADTRAN_VERSION} \
+ && rm reptran.tar.gz \
  && cd libRadtran-${LIBRADTRAN_VERSION} \
  && PYTHON=python3 ./configure \
  && mkdir -p /opt/local \
