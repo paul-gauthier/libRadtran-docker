@@ -63,5 +63,5 @@ docker run --rm -it libradtran:2.0.6 bash
 ## Notes
 
 - Building the image requires internet access to download the libRadtran source tarball.
-- Tests run inside the container, not on the host system.
-- This repository is intended for containerized build and test workflows.
+- Tests run inside the container.
+
