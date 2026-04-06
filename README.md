@@ -42,7 +42,7 @@ The Docker image:
 
 - starts from Ubuntu 22.04
 - downloads the official libRadtran 2.0.6 source tarball
-- downloads and installs the REPTRAN data package
+- downloads and installs the REPTRAN data package, including the data for the REPTRAN absorption parameterization
 - installs the required build tools and libraries
 - runs `./configure` with `PYTHON=python3`
 - builds the project with `make -j"$(nproc)"`
@@ -73,7 +73,8 @@ files that `uvspec` reads or writes should live in that directory tree.
 
 You should use `/opt/libRadtran-2.0.6/data` as the data path in the
 input you provide to uvspec.
-That is the libRadtran data path inside the container.
+That is the libRadtran data path inside the container, and it includes
+the installed data for the REPTRAN absorption parameterization.
 
 `uvspec_docker.sh` mounts only `$(pwd)`. Run it from the directory
 containing any input, output, or temporary files that `uvspec` needs to
@@ -85,5 +86,5 @@ extra Docker mounts.
 
 - Building the image requires internet access to download the libRadtran source tarball.
 - Tests run inside the container.
-- See the [libRadtran download page](https://www.libradtran.org/doku.php?id=download) for additional optional data packages (e.g. REPTRAN absorption parameterization, cloud and aerosol optical properties).
+- This image already includes the REPTRAN absorption parameterization data. See the [libRadtran download page](https://www.libradtran.org/doku.php?id=download) for additional optional data packages, such as cloud and aerosol optical properties.
 
