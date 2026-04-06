@@ -39,6 +39,8 @@ RUN tar -xzf libRadtran.tar.gz \
  && rm libRadtran.tar.gz \
  && cd libRadtran-${LIBRADTRAN_VERSION} \
  && PYTHON=python3 ./configure \
+ && mkdir -p /opt/local/include \
+ && ln -s /usr/include/netcdf.h /opt/local/include/netcdf.h \
  && make -j"$(nproc)"
 
 ENV PATH="/opt/libRadtran-${LIBRADTRAN_VERSION}/bin:${PATH}"
