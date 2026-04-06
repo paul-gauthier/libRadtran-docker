@@ -62,6 +62,31 @@ To inspect the built environment manually:
 docker run --rm -it libradtran:2.0.6 bash
 ```
 
+## Running the transmission script via Docker
+
+Once the image is built you can use `uvspec_docker.sh` as a drop-in replacement
+for a native `uvspec` binary. It forwards stdin/stdout and mounts the current
+working directory into the container so that temporary filter files are visible.
+
+```bash
+chmod +x uvspec_docker.sh
+
+# Option A: environment variables
+export UVSPEC=./uvspec_docker.sh
+export LIBRADTRAN_DATA_PATH=/opt/libRadtran-2.0.6/data
+python3 run_libradtran_transmission.py
+
+# Option B: CLI flags
+python3 run_libradtran_transmission.py \
+    --uvspec ./uvspec_docker.sh \
+    --data-path /opt/libRadtran-2.0.6/data
+```
+
+> **Note:** `LIBRADTRAN_DATA_PATH` (or `--data-path`) is set to a path
+> *inside the container*. The Python script only embeds it as text in the
+> uvspec input; `uvspec` itself resolves it against the container filesystem
+> where the data was installed at build time.
+
 ## Notes
 
 - Building the image requires internet access to download the libRadtran source tarball.
