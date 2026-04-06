@@ -64,37 +64,22 @@ To inspect the built environment manually:
 docker run --rm -it libradtran:2.0.6 bash
 ```
 
-## Running the transmission script via Docker
+## Running uvspec_docker.sh
 
 Once the image is built you can use `uvspec_docker.sh` as a drop-in replacement
 for a native `uvspec` binary. It forwards stdin/stdout and mounts only the
 current working directory into the container at the same absolute path, so
 files that `uvspec` reads or writes should live in that directory tree.
 
-```bash
-chmod +x uvspec_docker.sh
+You should use `/opt/libRadtran-2.0.6/data` as the data path in the
+input you provide to uvspec.
+That is the libRadtran data path inside the container.
 
-# Option A: environment variables
-export UVSPEC=./uvspec_docker.sh
-export LIBRADTRAN_DATA_PATH=/opt/libRadtran-2.0.6/data
-python3 run_libradtran_transmission.py
-
-# Option B: CLI flags
-python3 run_libradtran_transmission.py \
-    --uvspec ./uvspec_docker.sh \
-    --data-path /opt/libRadtran-2.0.6/data
-```
-
-> **Note:** `LIBRADTRAN_DATA_PATH` (or `--data-path`) is set to a path
-> *inside the container*. The Python script only embeds it as text in the
-> uvspec input; `uvspec` itself resolves it against the container filesystem
-> where the data was installed at build time.
->
-> **Note:** `uvspec_docker.sh` mounts only `$(pwd)`. Run it from the directory
-> containing any input, output, or temporary files that `uvspec` needs to
-> access. Relative paths are resolved from that mounted working directory, and
-> host paths outside it are not visible inside the container unless you add
-> extra Docker mounts.
+`uvspec_docker.sh` mounts only `$(pwd)`. Run it from the directory
+containing any input, output, or temporary files that `uvspec` needs to
+access. Relative paths are resolved from that mounted working directory, and
+host paths outside it are not visible inside the container unless you add
+extra Docker mounts.
 
 ## Notes
 
