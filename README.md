@@ -1,5 +1,7 @@
 # libRadtran Docker Build
 
+[libRadtran](https://www.libradtran.org/) (library for radiative transfer) is a collection of C and Fortran functions and programs for calculation of solar and thermal radiation in the Earth's atmosphere. It is freely available under the GNU General Public License.
+
 This repository builds **libRadtran 2.0.6** inside a Docker container and provides a simple, reproducible way to run the upstream test suite on **Ubuntu 22.04**.
 
 ## Requirements
@@ -64,4 +66,5 @@ docker run --rm -it libradtran:2.0.6 bash
 
 - Building the image requires internet access to download the libRadtran source tarball.
 - Tests run inside the container.
+- See the [libRadtran download page](https://www.libradtran.org/doku.php?id=download) for additional optional data packages (e.g. REPTRAN absorption parameterization, cloud and aerosol optical properties).
 
