@@ -2,7 +2,7 @@
 
 [libRadtran](https://www.libradtran.org/) (library for radiative transfer) is a collection of C and Fortran functions and programs for calculation of solar and thermal radiation in the Earth's atmosphere. It is freely available under the GNU General Public License.
 
-This repository builds **libRadtran 2.0.6** inside a Docker container and provides a simple, reproducible way to run the upstream test suite on **Ubuntu 22.04**.
+This repository builds **libRadtran 2.0.6** inside a Docker container and provides a simple containerized build/test workflow for the upstream test suite on **Ubuntu 22.04**.
 
 ## Requirements
 
@@ -10,13 +10,13 @@ This repository builds **libRadtran 2.0.6** inside a Docker container and provid
 
 ## Build the image
 
-Run:
+Run from the repository root:
 
 ```bash
 ./docker_build.sh
 ```
 
-This builds a Docker image tagged:
+This script builds the Docker image from `.` and tags it as:
 
 ```bash
 libradtran:2.0.6
@@ -67,20 +67,26 @@ docker run --rm -it libradtran:2.0.6 bash
 ## Running uvspec_docker.sh
 
 Once the image is built you can use `uvspec_docker.sh` as a drop-in replacement
-for a native `uvspec` binary. It forwards stdin/stdout and mounts only the
-current working directory into the container at the same absolute path, so
-files that `uvspec` reads or writes should live in that directory tree.
+for a native `uvspec` binary. Run it from the directory containing any input,
+output, or temporary files that `uvspec` needs. It forwards stdin/stdout and
+mounts only the current working directory into the container at the same
+absolute path, so files that `uvspec` reads or writes should live in that
+directory tree.
+
+For example:
+
+```bash
+./uvspec_docker.sh < input.inp > output.out
+```
 
 You should use `/opt/libRadtran-2.0.6/data` as the data path in the
 input you provide to uvspec.
 That is the libRadtran data path inside the container, and it includes
 the installed data for the REPTRAN absorption parameterization.
 
-`uvspec_docker.sh` mounts only `$(pwd)`. Run it from the directory
-containing any input, output, or temporary files that `uvspec` needs to
-access. Relative paths are resolved from that mounted working directory, and
-host paths outside it are not visible inside the container unless you add
-extra Docker mounts.
+`uvspec_docker.sh` mounts only `$(pwd)`. Relative paths are resolved from that
+mounted working directory, and host paths outside it are not visible inside the
+container unless you add extra Docker mounts.
 
 ## Notes
 
