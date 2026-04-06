@@ -1,3 +1,18 @@
+FROM ubuntu:22.04 AS fetch
+
+ENV DEBIAN_FRONTEND=noninteractive
+ARG LIBRADTRAN_VERSION=2.0.6
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt
+
+RUN wget -O libRadtran.tar.gz \
+      https://www.libradtran.org/download/libRadtran-${LIBRADTRAN_VERSION}.tar.gz
+
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -6,7 +21,6 @@ ARG LIBRADTRAN_VERSION=2.0.6
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gfortran \
-    wget \
     ca-certificates \
     perl \
     flex \
@@ -16,9 +30,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /opt
 
-RUN wget -O libRadtran.tar.gz \
-      https://www.libradtran.org/download/libRadtran-${LIBRADTRAN_VERSION}.tar.gz \
- && tar -xzf libRadtran.tar.gz \
+COPY --from=fetch /opt/libRadtran.tar.gz /opt/libRadtran.tar.gz
+
+RUN tar -xzf libRadtran.tar.gz \
  && rm libRadtran.tar.gz \
  && cd libRadtran-${LIBRADTRAN_VERSION} \
  && ./configure \
