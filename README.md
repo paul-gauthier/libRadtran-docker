@@ -42,6 +42,7 @@ The Docker image:
 
 - starts from Ubuntu 22.04
 - downloads the official libRadtran 2.0.6 source tarball
+- downloads and installs the REPTRAN data package
 - installs the required build tools and libraries
 - runs `./configure` with `PYTHON=python3`
 - builds the project with `make -j"$(nproc)"`
@@ -53,6 +54,7 @@ The container `PATH` is configured to include the libRadtran `bin` directory, an
 - `Dockerfile` - defines the Docker image and builds libRadtran
 - `docker_build.sh` - builds the `libradtran:2.0.6` image
 - `docker_test.sh` - runs `make check` inside the container
+- `uvspec_docker.sh` - runs `uvspec` inside the container with the current working directory mounted
 
 ## Optional: open a shell in the container
 
@@ -65,8 +67,9 @@ docker run --rm -it libradtran:2.0.6 bash
 ## Running the transmission script via Docker
 
 Once the image is built you can use `uvspec_docker.sh` as a drop-in replacement
-for a native `uvspec` binary. It forwards stdin/stdout and mounts the current
-working directory into the container so that temporary filter files are visible.
+for a native `uvspec` binary. It forwards stdin/stdout and mounts only the
+current working directory into the container at the same absolute path, so
+files that `uvspec` reads or writes should live in that directory tree.
 
 ```bash
 chmod +x uvspec_docker.sh
@@ -86,6 +89,12 @@ python3 run_libradtran_transmission.py \
 > *inside the container*. The Python script only embeds it as text in the
 > uvspec input; `uvspec` itself resolves it against the container filesystem
 > where the data was installed at build time.
+>
+> **Note:** `uvspec_docker.sh` mounts only `$(pwd)`. Run it from the directory
+> containing any input, output, or temporary files that `uvspec` needs to
+> access. Relative paths are resolved from that mounted working directory, and
+> host paths outside it are not visible inside the container unless you add
+> extra Docker mounts.
 
 ## Notes
 
