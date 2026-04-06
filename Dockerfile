@@ -13,7 +13,7 @@ WORKDIR /opt
 RUN wget -O libRadtran.tar.gz \
       https://www.libradtran.org/download/libRadtran-${LIBRADTRAN_VERSION}.tar.gz \
  && wget -O reptran.tar.gz \
-      https://www.libradtran.org/download/reptran/reptran_2017_all.tar.gz
+      "https://www.libradtran.org/lib/exe/fetch.php?media=download:reptran_2024_all.tar.gz"
 
 FROM ubuntu:22.04
 
