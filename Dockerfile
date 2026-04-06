@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     flex \
     bison \
     libnetcdf-dev \
+    libgsl-dev \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt
