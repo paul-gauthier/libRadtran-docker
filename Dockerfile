@@ -23,6 +23,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gfortran \
     ca-certificates \
     perl \
+    python3 \
+    python-is-python3 \
     flex \
     bison \
     libnetcdf-dev \
@@ -36,7 +38,7 @@ COPY --from=fetch /opt/libRadtran.tar.gz /opt/libRadtran.tar.gz
 RUN tar -xzf libRadtran.tar.gz \
  && rm libRadtran.tar.gz \
  && cd libRadtran-${LIBRADTRAN_VERSION} \
- && ./configure \
+ && PYTHON=python3 ./configure \
  && make -j"$(nproc)"
 
 ENV PATH="/opt/libRadtran-${LIBRADTRAN_VERSION}/bin:${PATH}"
